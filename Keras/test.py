@@ -16,7 +16,7 @@ import math
 # from tensorflow.keras import Sequential
 # from tensorflow.keras.layers import Conv2D, Dropout, MaxPooling2D, Flatten, Dense
 
-from data_generator import data_generator
+from Keras.data_generator import data_generator
 
 def create_model (input_shape):
     model = Sequential()
@@ -46,10 +46,11 @@ def create_model (input_shape):
 model = create_model((48, 48, 1))
 model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
 
-filepath = "models/intermediate-{epoch:02d}-{val_loss:.2f}.hdf5"
+filepath = "./models/intermediate-{epoch:02d}-{val_loss:.2f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
 callbacks_list = [checkpoint]
 
+# assuming working directory at project root
 train_gen = data_generator('./data/train', './data/train_labels/train_labels.csv', image_size=48, sample_prob=0.1, batch_size=32)
 validation_gen = data_generator('./data/train', './data/train_labels/train_labels.csv', image_size=48, sample_prob=0.01, batch_size=1)
 
