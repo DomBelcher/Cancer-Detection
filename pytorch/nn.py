@@ -31,6 +31,8 @@ optimiser = optim.Adam(model.parameters())
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 trial = Trial(model, optimiser, loss_function, metrics=['loss', 'accuracy']).to(device)
 trial.with_generators(train_loader, test_generator=validation_loader)
-trial.run(epochs=50)
+trial.run(epochs=10)
 results = trial.evaluate(data_key=torchbearer.TEST_DATA)
 print(results)
+
+torch.save(model.state_dict(), "./weights/test.weights")
