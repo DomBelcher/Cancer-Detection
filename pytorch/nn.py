@@ -4,7 +4,7 @@ from torch import nn
 from torch import optim
 from torchbearer import Trial
 
-from models.test_model import TestModel
+from models.test_model_2 import TestModel
 from data_loader import loader
 
 data_path = '../Data'
