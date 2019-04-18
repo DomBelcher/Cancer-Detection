@@ -15,7 +15,7 @@ labels_path = '{}/train_labels/train_labels.csv'.format(data_path)
 # print(len(train_labels))
 
 
-batch_size = 128
+batch_size = 1
 validation_split = .2
 shuffle_dataset = True
 

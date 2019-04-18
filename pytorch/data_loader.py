@@ -8,9 +8,9 @@ from dataset import CancerDataset
 def loader (image_path, label_path, batch_size, validation_split, shuffle_dataset=True, random_seed=42, p=1):
     dataset = CancerDataset(label_path, image_path)
 
-    dataset_size = len(dataset)
+    dataset_size = int(np.floor(len(dataset) * p))
     indices = list(range(dataset_size))
-    split = int(np.floor(validation_split * dataset_size * p))
+    split = int(np.floor(validation_split * dataset_size))
     if shuffle_dataset:
         np.random.seed(random_seed)
         np.random.shuffle(indices)
