@@ -5,8 +5,8 @@ import numpy as np
 from dataset import CancerDataset
 
 
-def loader (image_path, label_path, batch_size, validation_split, shuffle_dataset=True, random_seed=42, p=1):
-    dataset = CancerDataset(label_path, image_path)
+def loader (image_path, label_path, batch_size, validation_split, shuffle_dataset=True, random_seed=42, p=1, transform=None):
+    dataset = CancerDataset(label_path, image_path, transform=transform)
 
     dataset_size = int(np.floor(len(dataset) * p))
     indices = list(range(dataset_size))

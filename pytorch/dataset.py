@@ -5,9 +5,10 @@ import torch
 from torch.utils.data import Dataset
 
 class CancerDataset(Dataset):
-    def __init__(self, csv_file, root_dir):
+    def __init__(self, csv_file, root_dir, transform=None):
         self.data_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
+        self.transform = transform
 
     def __len__(self):
         return len(self.data_frame)
@@ -16,7 +17,10 @@ class CancerDataset(Dataset):
         img_name = '{}/{}.tif'.format(self.root_dir,
                                       self.data_frame.iloc[idx, 0])
         img = cv2.imread(img_name)
-        img = img[24:-24, 24:-24, :]
-        img = np.moveaxis(img, -1, 0)
+        # img = img[24:-24, 24:-24, :]
+        # img = np.moveaxis(img, -1, 0)
 
-        return torch.Tensor(img), self.data_frame.iloc[idx, 1] #.astype(float)
+        if self.transform:
+            img = self.transform(img)
+
+        return img, self.data_frame.iloc[idx, 1] #.astype(float)
