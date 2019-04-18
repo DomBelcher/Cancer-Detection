@@ -5,12 +5,12 @@ import numpy as np
 from dataset import CancerDataset
 
 
-def loader (image_path, label_path, batch_size, validation_split, shuffle_dataset=True, random_seed=42):
+def loader (image_path, label_path, batch_size, validation_split, shuffle_dataset=True, random_seed=42, p=1):
     dataset = CancerDataset(label_path, image_path)
 
     dataset_size = len(dataset)
     indices = list(range(dataset_size))
-    split = int(np.floor(validation_split * dataset_size))
+    split = int(np.floor(validation_split * dataset_size * p))
     if shuffle_dataset:
         np.random.seed(random_seed)
         np.random.shuffle(indices)
