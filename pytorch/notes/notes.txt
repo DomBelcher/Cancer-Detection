@@ -1,0 +1,19 @@
+test_model run for 10 epochs with all data, 80/20 train/validation split
+no data augmentation
+achieved 89.4% accuracy on training, 84.5% on validation
+
+test_model run for 10 epochs with 10% of data, 80/20 train/validation split
+no data augmentation
+achieved 87.4% accuracy on training, 78.8% on validation
+
+test_model_1 run for 10 epochs with 10% of data, 80/20 train/validation split
+no data augmentation
+achieved 97.2% accuracy on training, 80.6% on validation
+
+test_model_1 run for 10 epochs with 10% of data, 80/20 train/validation split
+random rotations applied to images
+achieved 84.9% accuracy on training, 72.5% on validation
+
+test_model_1 run for 10 epochs with 10% of data, 80/20 train/validation split
+random rotations applied to images, images normalised to values in range [0, 1]
+achieved 84.2% accuracy on training, 82.4% on validation
