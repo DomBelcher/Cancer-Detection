@@ -19,6 +19,7 @@ labels_path = '{}/train_labels/train_labels.csv'.format(data_path)
 trans = transforms.Compose([
     tfs.RandomRotation(range=(0, 360)),
     tfs.Downsize(),
+    tfs.Normalise(),
     # tfs.ChannelShift(),
     transforms.ToTensor()
 ])

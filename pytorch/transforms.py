@@ -35,6 +35,10 @@ class RandomRotation(object):
         return cv2.warpAffine(sample,M,(cols,rows))
 
 
+class Normalise(object):
+    def __call__(self, sample):
+        return sample/255
+
 class ChannelShift(object):
     def __call__(self, sample):
         return np.moveaxis(sample, -1, 0)
