@@ -5,7 +5,7 @@ from torch import optim
 from torchbearer import Trial
 import torchvision.transforms as transforms
 
-from models.test_model_2 import TestModel
+from models.resnet_model_2 import TestModel
 from data_loader import loader
 import transforms as tfs
 
