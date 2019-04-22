@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torchbearer
 from torch import nn
@@ -8,6 +10,7 @@ import torchvision.transforms as transforms
 from models.resnet_model_2 import TestModel
 from data_loader import loader
 import transforms as tfs
+from helpers import deactivate_layer
 
 data_path = '../Data'
 labels_path = '{}/train_labels/train_labels.csv'.format(data_path)
@@ -28,12 +31,21 @@ trans = transforms.Compose([
 batch_size = 12
 validation_split = .2
 shuffle_dataset = True
+p = 1
 
-train_loader, validation_loader = loader('{}/train'.format(data_path), labels_path, batch_size, validation_split, p=1, transform=trans)
+train_loader, validation_loader = loader('{}/train'.format(data_path), labels_path, batch_size, validation_split, p=p, transform=trans)
 
 model = TestModel()
-
 model.train()
+
+state_path = './weights/test.weights'
+state_dict = torch.load(state_path)
+state_dict['fc1'] = None
+state_dict['fc2'] = None
+model.load_state_dict(state_dict, strict=False)
+to_deactivate = ['conv1a', 'conv1b', 'conv1c', 'conv2a', 'conv2b', 'conv2c', 'conv3a', 'conv3b', 'conv3c']
+for l in to_deactivate:
+    deactivate_layer(model, l)
 
 loss_function = nn.CrossEntropyLoss()
 optimiser = optim.Adam(model.parameters())
@@ -45,4 +57,11 @@ trial.run(epochs=10)
 results = trial.evaluate(data_key=torchbearer.TEST_DATA)
 print(results)
 
-torch.save(model.state_dict(), "./weights/test.weights")
+model_name = 'resnet_model_3'
+weights_path = './weights/{}/'.format(model_name)
+
+if not os.path.exists(weights_path):
+        os.makedirs(weights_path)
+
+w_filepath = './weights/{}/train_{}.weights'.format(model_name, p)
+torch.save(model.state_dict(), w_filepath)
