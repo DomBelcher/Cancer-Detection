@@ -63,8 +63,8 @@ class TestModel(nn.Module):
 
         out = self.fc1(out)
         out = F.relu(out)
-        out = nn.Dropout(0.25)(out)
-        out = self.fc2(out)
+        # out = nn.Dropout(0.25)
+        # out = self.fc2(out)
         # out = self.sigmoid(out)
 
         #         print(out)
