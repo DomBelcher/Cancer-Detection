@@ -4,6 +4,7 @@ import torchvision.transforms as transforms
 import numpy as np
 from sklearn.svm import SVC
 from sklearn import metrics
+from joblib import dump
 
 from models.resnet_model_2_headless import TestModel
 from data_loader import loader
@@ -22,13 +23,15 @@ trans = transforms.Compose([
     transforms.ToTensor()
 ])
 
-batch_size = 1
+p = 0.1
+
+batch_size = 64
 validation_split = .2
 shuffle_dataset = True
 
 data_path = '../Data'
 labels_path = '{}/train_labels/train_labels.csv'.format(data_path)
-train_loader, validation_loader = loader('{}/train'.format(data_path), labels_path, batch_size, validation_split, p=1, transform=trans)
+train_loader, validation_loader = loader('{}/train'.format(data_path), labels_path, batch_size, validation_split, p=p, transform=trans)
 
 # inputs, labels = next(iter(train_loader))
 # print(labels)
@@ -37,10 +40,13 @@ train_loader, validation_loader = loader('{}/train'.format(data_path), labels_pa
 # print(model(inputs.float()))
 # print(labels)
 
+
 try:
-    features = np.load('./features/resnet_2_features')
-    labels = np.load('./features/resnet_2_labels')
+    features = np.load('./features/resnet_2_features_{}.npy'.format(p))
+    labels = np.load('./features/resnet_2_labels_{}.npy'.format(p))
+    print('Loaded training data')
 except IOError:
+    print('Failed to load training data')
     features = np.zeros((0, 128))
     labels = np.zeros(0)
 
@@ -54,13 +60,15 @@ except IOError:
         features = np.append(features, outputs.detach().numpy(), axis=0)
         labels = np.append(labels, label)
 
-    np.save('./features/resnet_2_features', features)
-    np.save('./features/resnet_2_labels', labels)
+    np.save('./features/resnet_2_features_{}'.format(p), features)
+    np.save('./features/resnet_2_labels_{}'.format(p), labels)
 
 try:
-    v_features = np.load('./features/resnet_2_features_v')
-    v_labels = np.load('./features/resnet_2_labels_v')
+    v_features = np.load('./features/resnet_2_features_{}_v.npy'.format(p))
+    v_labels = np.load('./features/resnet_2_labels_{}_v.npy'.format(p))
+    print('Loaded validatiom data')
 except IOError:
+    print('Failed to load validation data')
     v_features = np.zeros((0, 128))
     v_labels = np.zeros(0)
 
@@ -74,12 +82,19 @@ except IOError:
         v_features = np.append(v_features, outputs.detach().numpy(), axis=0)
         v_labels = np.append(v_labels, label)
 
-    np.save('./features/resnet_2_features_v', v_features)
-    np.save('./features/resnet_2_labels_v', v_labels)
+    np.save('./features/resnet_2_features_{}_v'.format(p), v_features)
+    np.save('./features/resnet_2_labels_{}_v'.format(p), v_labels)
 
-svc = SVC(C=25, gamma='scale')
+print('Training SVM')
+svc = SVC(C=25, gamma='scale', verbose=1)
 svc.fit(features, labels)
 
+print('Training Data Report')
+train_pred = svc.predict(features)
+print(metrics.classification_report(labels, train_pred))
+
 print('Validation Data Report')
-train_pred = svc.predict(v_features)
-print(metrics.classification_report(v_labels, train_pred))
+valid_pred = svc.predict(v_features)
+print(metrics.classification_report(v_labels, valid_pred))
+
+dump(svc, './classifiers/resnet-svm_{}.joblib'.format(p))
