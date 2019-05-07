@@ -40,3 +40,23 @@ achieved 90% accuracy on validation data
 
 SVM results suggest that extracted features are not linearly separable
 could benefit from more fully connected layers in neural network
+
+resnet_model_2 rerun for 10 epochs with 10% of data, 80/20 train/validation split
+trained using all weights from 90% resnet_model_2
+random rotations applied to images, images normalised to values in range [0, 1]
+achieved 91.8% accuracy on training, 91.3% on validation
+
+resnet_model_2 rerun again for 10 epochs with 10% of data, 80/20 train/validation split
+trained using all weights from 90% resnet_model_2 rerun
+random rotations applied to images, images normalised to values in range [0, 1]
+achieved 91.8% accuracy on training, 91.4% on validation
+
+resnet model_3 run for 10 epochs with 10% of data, 80/20 train/validation split
+trained using CNN features from 90% resnet_model_2
+random rotations applied to images, images normalised to values in range [0, 1]
+achieved 91.0% accuracy on training, 91.0% on validation
+
+resnet model_3a run for 10 epochs with 10% of data, 80/20 train/validation split
+trained using CNN features & fc1 weights from 90% resnet_model_3
+random rotations applied to images, images normalised to values in range [0, 1]
+achieved 92.0% accuracy on training, 91.3% on validation

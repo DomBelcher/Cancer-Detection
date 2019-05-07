@@ -6,12 +6,12 @@ from sklearn.svm import SVC
 from sklearn import metrics
 from joblib import dump
 
-from models.resnet_model_2_headless import TestModel
+from models.resnet_model_3a_headless import TestModel
 from data_loader import loader
 import transforms as tfs
 
 model = TestModel()
-model.load_state_dict(torch.load('./weights/test.weights'))
+model.load_state_dict(torch.load('./weights/resnet_model_3a/train_0.1.weights'), strict=False)
 model.eval()
 model = model.float()
 
@@ -40,14 +40,15 @@ train_loader, validation_loader = loader('{}/train'.format(data_path), labels_pa
 # print(model(inputs.float()))
 # print(labels)
 
+n_features = 512
 
 try:
-    features = np.load('./features/resnet_2_features_{}.npy'.format(p))
-    labels = np.load('./features/resnet_2_labels_{}.npy'.format(p))
+    features = np.load('./features/resnet_3a_features_{}.npy'.format(p))
+    labels = np.load('./features/resnet_3a_labels_{}.npy'.format(p))
     print('Loaded training data')
 except IOError:
     print('Failed to load training data')
-    features = np.zeros((0, 128))
+    features = np.zeros((0, n_features))
     labels = np.zeros(0)
 
     for i, data in enumerate(train_loader, 0):
@@ -60,16 +61,16 @@ except IOError:
         features = np.append(features, outputs.detach().numpy(), axis=0)
         labels = np.append(labels, label)
 
-    np.save('./features/resnet_2_features_{}'.format(p), features)
-    np.save('./features/resnet_2_labels_{}'.format(p), labels)
+    np.save('./features/resnet_3a_features_{}'.format(p), features)
+    np.save('./features/resnet_3a_labels_{}'.format(p), labels)
 
 try:
-    v_features = np.load('./features/resnet_2_features_{}_v.npy'.format(p))
-    v_labels = np.load('./features/resnet_2_labels_{}_v.npy'.format(p))
+    v_features = np.load('./features/resnet_3a_features_{}_v.npy'.format(p))
+    v_labels = np.load('./features/resnet_3a_labels_{}_v.npy'.format(p))
     print('Loaded validatiom data')
 except IOError:
     print('Failed to load validation data')
-    v_features = np.zeros((0, 128))
+    v_features = np.zeros((0, n_features))
     v_labels = np.zeros(0)
 
     for i, data in enumerate(validation_loader, 0):
@@ -82,8 +83,8 @@ except IOError:
         v_features = np.append(v_features, outputs.detach().numpy(), axis=0)
         v_labels = np.append(v_labels, label)
 
-    np.save('./features/resnet_2_features_{}_v'.format(p), v_features)
-    np.save('./features/resnet_2_labels_{}_v'.format(p), v_labels)
+    np.save('./features/resnet_3a_features_{}_v'.format(p), v_features)
+    np.save('./features/resnet_3a_labels_{}_v'.format(p), v_labels)
 
 print('Training SVM')
 svc = SVC(C=25, gamma='scale', verbose=1)
