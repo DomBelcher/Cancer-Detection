@@ -43,3 +43,10 @@ class ChannelShift(object):
     def __call__(self, sample):
         return np.moveaxis(sample, -1, 0)
 
+class PytorchToNumpy(object):
+    def __call__(self, sample):
+        return sample.numpy()
+
+class PillowToNumpy(object):
+    def __call__(self, sample):
+        return np.array(sample)
