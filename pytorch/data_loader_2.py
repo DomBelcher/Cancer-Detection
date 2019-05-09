@@ -28,3 +28,17 @@ def load_datasets(batch_size, transform=None):
     )
 
     return train_loader, val_loader
+
+def test_dataset(batch_size, transform=None):
+    test_path = '../data/train/Testing'
+    test_dataset = torchvision.datasets.ImageFolder(
+        root=test_path,
+        transform=transform
+    )
+    test_loader = torch.utils.data.DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        num_workers=0,
+        shuffle=True
+    )
+    return test_loader
