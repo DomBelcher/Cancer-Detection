@@ -30,7 +30,7 @@ def load_datasets(batch_size, transform=None):
     return train_loader, val_loader
 
 def test_dataset(batch_size, transform=None):
-    test_path = '../data/train/Testing'
+    test_path = '../data/train/Validation'
     test_dataset = torchvision.datasets.ImageFolder(
         root=test_path,
         transform=transform
