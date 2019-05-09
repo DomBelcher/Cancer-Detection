@@ -11,7 +11,7 @@ from data_loader_2 import test_dataset
 from test_dataset import TestDataset
 import transforms as tfs
 
-trans = transforms.Compose([
+np_transorms = transforms.Compose([
     # transforms.CenterCrop(48),
     # tfs.PillowToNumpy(),
     # tfs.RandomRotation(range=(0, 360)),
@@ -21,11 +21,17 @@ trans = transforms.Compose([
     transforms.ToTensor()
 ])
 
-test_loader = test_dataset(batch_size=128, transform=trans)
+pillow_transforms = transforms.Compose([
+    transforms.CenterCrop(48),
+    transforms.ToTensor()
+])
 
-data_path = '../data/train/Validation'
-dataset_0 = TestDataset('{}'.format(data_path), label=0, transform=trans)
-dataset_1 = TestDataset('{}'.format(data_path), label=1, transform=trans)
+
+test_loader = test_dataset(batch_size=128, transform=pillow_transforms)
+
+data_path = '../data/train/Testing'
+dataset_0 = TestDataset('{}'.format(data_path), label=0, transform=np_transorms)
+dataset_1 = TestDataset('{}'.format(data_path), label=1, transform=np_transorms)
 
 device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 print(device)
@@ -33,7 +39,7 @@ print(device)
 model = TestModel()
 model.to(device)
 state_path = './weights/resnet_model_3c/train_1.weights'
-state_dict = torch.load(state_path)
+state_dict = torch.load(state_path, map_location=device)
 model.load_state_dict(state_dict)
 model.eval()
 
@@ -104,10 +110,10 @@ with torch.no_grad():
     for data in test_loader:
         images, labels = data
         images = images.to(device)
+        labels = labels.to(device)
         # print(images.to(device))
         # images.cuda()
         # images.type(torch.cuda.FloatTensor)
-        labels = labels.to(device)
         # print(labels.to(device))
         # labels.type(torch.cuda.FloatTensor)
         outputs = model(images)
