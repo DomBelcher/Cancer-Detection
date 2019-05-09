@@ -1,4 +1,5 @@
 import torchvision
+import torch
 
 def load_datasets(batch_size, transform=None):
     train_path = '../data/train/Training'
@@ -6,7 +7,7 @@ def load_datasets(batch_size, transform=None):
 
     train_dataset = torchvision.datasets.ImageFolder(
         root=train_path,
-        transform=torchvision.transforms.ToTensor()
+        transform=transform
     )
     train_loader = torch.utils.data.DataLoader(
         train_dataset,

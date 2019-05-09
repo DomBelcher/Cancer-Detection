@@ -16,9 +16,11 @@ class TestDataset(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        img_name = '{}/{}/{}.tif'.format(self.root_dir,
+        img_name = '{}/{}/{}'.format(self.root_dir,
                                          self.label,
                                          self.files[idx])
+
+        # print(img_name)
         img = cv2.imread(img_name)
         # img = img[24:-24, 24:-24, :]
         # img = np.moveaxis(img, -1, 0)

@@ -23,7 +23,7 @@ class TestModel(nn.Module):
 
         self.fc1 = self.fc1 = nn.Linear((maps * 4) * 6 * 6, 512)
         # self.fc2 = nn.Linear(512, 512)
-        self.fc3 = nn.Linear(512, 2)
+        self.fc2 = nn.Linear(512, 2)
 
         self.max_pool = nn.MaxPool2d(2)
 
