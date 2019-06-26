@@ -1,22 +1,6 @@
-# COMP6208 Advanced Machine Learning
-## Group Project - NIMET
+# Cancer Detection - CNN Image Classifier Experiments
+Created for Histopathologic Cancer Detection [Kaggle Competition](https://www.kaggle.com/c/histopathologic-cancer-detection)
 
-### test.py
-Contains Keras model for basis CNN image classifier.
-Currently set to use PlaidML backend for training on AMD GPU.
-To use with Tensorflow, comment out lines
+Originally created for Advanced Machine Learning group project
 
-```python
-import os
-os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-```
-
-Optionally also change all
-
-```python
-from keras...
-```
-to 
-```python
-from tensorflow.keras...
-```
+Keras code is only an initial experiment, most of the work is done in pytorch.
