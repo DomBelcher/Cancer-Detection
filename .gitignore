@@ -1,4 +1,5 @@
 data
 .idea
-models
 *.h5
+features
+classifiers
